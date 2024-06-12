@@ -1,4 +1,5 @@
 use crate::cmd::InitHook;
+use crate::config::InnerCmd;
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct Opts<'a> {
@@ -6,6 +7,7 @@ pub struct Opts<'a> {
     pub hook: InitHook,
     pub echo: bool,
     pub resolve_symlinks: bool,
+    pub cmd_inner: InnerCmd
 }
 
 macro_rules! make_template {

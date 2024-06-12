@@ -58,3 +58,30 @@ pub fn maxage() -> Result<Rank> {
 pub fn resolve_symlinks() -> bool {
     env::var_os("_ZO_RESOLVE_SYMLINKS").map_or(false, |var| var == "1")
 }
+
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+pub enum InnerCmd {
+    #[default]
+    CD,
+    PushD,
+}
+
+impl std::str::FromStr for InnerCmd {
+    type Err = ();
+
+    fn from_str(s: &str) -> std::prelude::v1::Result<Self, Self::Err> {
+        match s {
+            "cd" => Ok(InnerCmd::CD),
+            "pushd" => Ok(InnerCmd::PushD),
+            _ => Err(()),
+        }
+    }
+}
+
+
+pub fn cmd_inner() -> InnerCmd {
+    env::var_os("_ZO_CMD_INNER")
+        .and_then(|cmd| cmd.to_str().map(std::str::FromStr::from_str))
+        .and_then(Result::ok)
+        .unwrap_or_default()
+}

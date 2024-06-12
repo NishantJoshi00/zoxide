@@ -19,7 +19,7 @@ function __zoxide_pwd() {
 # cd + custom logic based on the value of _ZO_ECHO.
 function __zoxide_cd() {
     # shellcheck disable=SC2164
-    \builtin cd -- "$@" {%- if echo %} && __zoxide_pwd {%- endif %}
+    \builtin {%- if cmd_inner == InnerCmd::CD %} cd {%- else if cmd_inner == InnerCmd::PushD %} pushd {%- endif %} -- "$@" {%- if echo %} && __zoxide_pwd {%- endif %}
 }
 
 {{ section }}
