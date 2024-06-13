@@ -19,17 +19,17 @@ end
 # A copy of fish's internal cd function. This makes it possible to use
 # `alias cd=z` without causing an infinite loop.
 if ! builtin functions --query __zoxide_cd_internal
-    {%- if cmd_inner == InnerCmd::CD %}
-    if builtin functions --query pushd
-        builtin functions --copy cd __zoxide_cd_internal
-    else
-        alias __zoxide_cd_internal='builtin cd'
-    end
-    {%- else if cmd_inner == InnerCmd::PushD %}
+    {%- if experimental_pushd %}
     if builtin functions --query pushd
         builtin functions --copy pushd __zoxide_cd_internal
     else
         alias __zoxide_cd_internal='builtin pushd'
+    end
+    {%- else %}
+    if builtin functions --query cd
+        builtin functions --copy cd __zoxide_cd_internal
+    else
+        alias __zoxide_cd_internal='builtin cd'
     end
     {%- endif %}
 end
